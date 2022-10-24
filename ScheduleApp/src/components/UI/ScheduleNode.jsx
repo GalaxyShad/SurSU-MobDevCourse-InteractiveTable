@@ -1,8 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-import { useFonts } from expo
-
 const ScheduleNode = ({ children, isActive = false, isDisabled = false, index = 0 }) => {
   return (
     <View

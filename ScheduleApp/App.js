@@ -1,16 +1,16 @@
 import { StatusBar } from "expo-status-bar";
 import { Text, View } from "react-native";
-import { styles } from "./src/values/styles";
+import { styles } from "./src/styles";
 
-import ScheduleNode from "./src/components/UI/ScheduleNode";
+import FacultyNode from "./src/components/UI/FacultyNode";
 
 export default () => {
   return (
     <View style={{ ...styles.container, paddingHorizontal: 16 }}>
       <Text style={{ ...styles.text }}> Программная инженерия </Text>
-      <ScheduleNode> Meow </ScheduleNode>
-      <ScheduleNode isActive = {true} > Gav </ScheduleNode>
-      <ScheduleNode> Bark </ScheduleNode>
+      <FacultyNode> Meow </FacultyNode>
+      <FacultyNode> Meow </FacultyNode>
+      <FacultyNode> Meow </FacultyNode>
       <StatusBar style="auto" />
     </View>
   );
