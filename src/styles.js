@@ -6,10 +6,8 @@ export const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         backgroundColor: '#202020',
-        alignItems: 'center',
-        justifyContent: 'center',
-
-
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
     },
     text: {
         color: '#707C82',

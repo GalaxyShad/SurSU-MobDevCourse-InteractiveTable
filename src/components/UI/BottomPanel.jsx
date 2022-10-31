@@ -2,44 +2,36 @@ import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
 
-import { AntDesign } from "@expo/vector-icons";
+import { PrettyButton } from "./PrettyButton";
+import { Shadow } from "react-native-shadow-2";
+import { PrettyInput } from "./PrettyInput";
+
 
 const BottomPanel = () => {
   return (
-    <View style={style.shadowProp}>
+
+    <Shadow style={style.shadowProp}
+            offset={[0, -1]}
+            distance={16}
+            startColor="#aaaaaa12" 
+    >
       <LinearGradient
         start={{ x: 0.0, y: 0.0 }}
         end={{ x: 0.9, y: 1.0 }}
         colors={["#202020", "#181818"]}
         style={style.panel}
       >
-        <TouchableOpacity style={style.button}>
-          <LinearGradient
-            start={{ x: 0.0, y: -1.0 }}
-            end={{ x: 0.9, y: 1.0 }}
-            colors={["#348CF3", "#103F9C"]}
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 64,
-              padding: 4,
-            }}
-          >
-            <View style={style.buttonInner}>
-              <AntDesign name="arrowleft" size={48} color="#454545" />
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
+        <PrettyButton iconName={'arrowleft'}></PrettyButton>
+        <PrettyInput> </PrettyInput>
+        <PrettyButton iconName={'arrowright'}></PrettyButton>
       </LinearGradient>
-    </View>
+    </Shadow>
   );
 };
 
 const style = StyleSheet.create({
   panel: {
     width: "100%",
-    height: 106,
     alignSelf: "flex-end",
 
     flex: 1,
@@ -48,18 +40,18 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
 
     paddingHorizontal: 16,
+    paddingBottom: 10
   },
 
   shadowProp: {
     width: "100%",
-    height: 106,
-
-    shadowColor: "#aaa",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.09,
-    shadowRadius: 16,
-    elevation: 3,
-    backgroundColor: "white",
+    height: 90,
+    // shadowColor: "#aaa",
+    // shadowOffset: { width: 0, height: -2 },
+    // shadowOpacity: 0.09,
+    // shadowRadius: 16,
+    // elevation: 3,
+    // backgroundColor: "white",
   },
 
   button: {
