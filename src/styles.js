@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: '#202020',
+        backgroundColor: '#1A1A1A',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
     },

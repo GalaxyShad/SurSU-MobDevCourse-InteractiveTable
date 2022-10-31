@@ -12,7 +12,7 @@ const PrettyButton = ({iconName}) => {
         <LinearGradient
           start={{ x: 0.0, y: -1.0 }}
           end={{ x: 0.9, y: 1.0 }}
-          colors={["#348CF3", "#103F9C"]}
+          colors={["#4a00e0", "#8E2DE2"]}
           style={{
             flex: 1,
             justifyContent: "center",

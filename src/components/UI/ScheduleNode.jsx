@@ -6,20 +6,31 @@ import { Neo } from "./Neo";
 import { useFonts } from "expo-font";
 
 const Tag = (props) => {
+  const evaluateColor = () => {
+    if (!props?.auditory) return;
+
+    switch (props?.auditory[0]) {
+      case 'У': return '#327C4B'
+      case 'А': return '#80306E'
+      case 'К': return '#1C4DCC'
+    }
+
+    return '#303030'
+  }
+
   return (
     <View
       style={{
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#327C4B",
+        backgroundColor: evaluateColor(),
         width: 70,
         height: 44,
         borderRadius: 12,
       }}
     >
       <Text style={{ color: "#fff", fontFamily: "M600" }}>
-        {" "}
-        {props.children}{" "}
+        {props.auditory}
       </Text>
     </View>
   );
@@ -27,13 +38,12 @@ const Tag = (props) => {
 
 const ScheduleNode = ({
   children,
-  isActive = false,
-  isDisabled = false,
+  content,
   index = 0,
 }) => {
 
   const timeTable = [
-    '8:30 - 9:50',
+      '8:30 - 9:50',
     '10:00 - 11:20',
     '11:30 - 12:50',
     '13:20 - 14:40',
@@ -43,15 +53,15 @@ const ScheduleNode = ({
 
 
   const setGradient = () => {
-    if (isDisabled) return ["#FFFFFF01", "#FFFFFF01"];
+    if (content == null) return ["#FFFFFF01", "#FFFFFF01"];
 
-    if (isActive) return ["#348CF3", "#103F9C"];
+    if (content.isActive) return ["#4a00e0", "#8E2DE2"];
 
     return ["#272727", "#272727"];
   };
 
   return (
-    <View style={style.container}>
+
       <LinearGradient
         // Background Linear Gradient
         start={{ x: 0.0, y: -1.0 }}
@@ -95,32 +105,28 @@ const ScheduleNode = ({
               textAlignVertical: "center",
             }}
           >
-            {children}
+            {content?.title}
           </Text>
         </View>
 
-        <Tag> У903 </Tag>
+        <Tag auditory={content?.auditory}/>
       </LinearGradient>
-    </View>
+
   );
 };
 
 const style = StyleSheet.create({
-  container: {
+  scheduleNode: {
     width: "100%",
 
-    // marginHorizontal: 2,
     marginBottom: 10,
-  },
 
-  scheduleNode: {
     flexDirection: "row",
     alignItems: "center",
-    // backgroundColor: "#2B2B2C",
 
     paddingHorizontal: 16,
     paddingVertical:  16,
-    borderRadius: 12,
+    borderRadius: 16,
 
     borderColor: "#272727",
     borderWidth: 4,
