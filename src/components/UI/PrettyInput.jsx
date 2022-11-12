@@ -10,7 +10,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 const PrettyInput = (props) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={props.onClick}>
       <NeoWithInner
         style={{ borderRadius: 32, height: 34, backgroundColor: "#202020" }}
       >
@@ -32,7 +32,7 @@ const PrettyInput = (props) => {
               color: "#454545",
             }}
           >
-            Понедельник
+            {props.date.toDateString()}
           </Text>
         </View>
       </NeoWithInner>

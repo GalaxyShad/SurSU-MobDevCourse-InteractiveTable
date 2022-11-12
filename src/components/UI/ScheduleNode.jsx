@@ -10,13 +10,16 @@ const Tag = (props) => {
     if (!props?.auditory) return;
 
     switch (props?.auditory[0]) {
-      case 'У': return '#327C4B'
-      case 'А': return '#80306E'
-      case 'К': return '#1C4DCC'
+      case "У":
+        return "#327C4B";
+      case "А":
+        return "#80306E";
+      case "К":
+        return "#1C4DCC";
     }
 
-    return '#303030'
-  }
+    return "#303030";
+  };
 
   return (
     <View
@@ -36,21 +39,15 @@ const Tag = (props) => {
   );
 };
 
-const ScheduleNode = ({
-  children,
-  content,
-  index = 0,
-}) => {
-
+const ScheduleNode = ({ children, content, date, group, index = 0 }) => {
   const timeTable = [
-      '8:30 - 9:50',
-    '10:00 - 11:20',
-    '11:30 - 12:50',
-    '13:20 - 14:40',
-    '14:50 - 16:10',
-    '16:20 - 17:40',
-  ]
-
+    "8:30 - 9:50",
+    "10:00 - 11:20",
+    "11:30 - 12:50",
+    "13:20 - 14:40",
+    "14:50 - 16:10",
+    "16:20 - 17:40",
+  ];
 
   const setGradient = () => {
     if (content == null) return ["#FFFFFF01", "#FFFFFF01"];
@@ -60,58 +57,85 @@ const ScheduleNode = ({
     return ["#272727", "#272727"];
   };
 
+  const getWeekOfMonth = (date) => {
+    let adjustedDate = date.getDate() + date.getDay();
+    let prefixes = ["0", "1", "2", "3", "4", "5"];
+
+    return parseInt(prefixes[0 | (adjustedDate / 7)]) + 1;
+  };
+
+  const parseContent = (content, date, group) => {
+    if (content == null) return null;
+
+    if (content.week) {
+      return parseContent(content.week[getWeekOfMonth(date) % 2], date, group);
+    }
+
+    if (content.group) {
+      return parseContent(content.group[group - 1], date, group);
+    }
+
+    return content;
+  };
+
+  content = parseContent(content, date, group);
+
   return (
-
-      <LinearGradient
-        // Background Linear Gradient
-        start={{ x: 0.0, y: -1.0 }}
-        end={{ x: 0.9, y: 1.0 }}
-        colors={setGradient()}
-        style={style.scheduleNode}
-      >
-        <View>
-          <Text
-            style={{ width: 40,  textAlign: 'center', color: "#ffffff40", fontFamily: "M700", fontSize: 50 }}
-          >
-            {index + 1 + ''}
-          </Text>
-        </View>
-
-        <View
+    <LinearGradient
+      start={{ x: 0.0, y: -1.0 }}
+      end={{ x: 0.9, y: 1.0 }}
+      colors={setGradient()}
+      style={style.scheduleNode}
+    >
+      <View>
+        <Text
           style={{
-            backgroundColor: "#3C3C3C",
-            width: 2,
-            height: "100%",
-            marginHorizontal: 10,
+            width: 40,
+            textAlign: "center",
+            color: "#ffffff40",
+            fontFamily: "M700",
+            fontSize: 50,
           }}
-        ></View>
+        >
+          {index + 1 + ""}
+        </Text>
+      </View>
 
-        <View style={{ flex: 1, flexDirection: "column", height: "100%" }}>
-          <Text
-            style={{
-              color: "#ffffff88",
-              fontSize: 14,
-              fontFamily: "M600",
-            }}
-          >
-            {timeTable[index]}
-          </Text>
-          <Text
-            style={{
-              marginTop: 4,
-              color: "#fff",
-              fontSize: 14,
-              fontFamily: "M600",
-              textAlignVertical: "center",
-            }}
-          >
-            {content?.title}
-          </Text>
-        </View>
+      <View
+        style={{
+          backgroundColor: "#3C3C3C",
+          width: 2,
+          height: "100%",
+          marginHorizontal: 10,
+        }}
+      ></View>
 
-        <Tag auditory={content?.auditory}/>
-      </LinearGradient>
+      <View style={{ flex: 1, flexDirection: "column", height: "100%" }}>
+        <Text
+          style={{
+            color: "#ffffff88",
+            fontSize: 14,
+            fontFamily: "M600",
+          }}
+        >
+          {timeTable[index]}
+        </Text>
+        <Text
+          style={{
+            marginTop: 4,
+            paddingRight: 4,
+            color: "#fff",
+            fontSize: 14,
+            fontFamily: "M600",
+            textAlignVertical: "center",
+          }}
+        >
+          {content?.title}
+        </Text>
+      </View>
 
+      <Tag auditory={content?.auditory} />
+    </LinearGradient>
   );
 };
 
@@ -125,7 +149,7 @@ const style = StyleSheet.create({
     alignItems: "center",
 
     paddingHorizontal: 16,
-    paddingVertical:  16,
+    paddingVertical: 16,
     borderRadius: 16,
 
     borderColor: "#272727",

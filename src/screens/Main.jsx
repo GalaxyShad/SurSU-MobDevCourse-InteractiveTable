@@ -9,7 +9,13 @@ import { GradientText } from "../components/UI/GradientText";
 
 import { AntDesign } from "@expo/vector-icons";
 
-const Header = () => {
+import { getSchedule } from "../HardcodedSchedule";
+
+import { useState } from "react";
+
+import DateTimePicker from "@react-native-community/datetimepicker";
+
+const Header = (props) => {
   return (
     <View
       style={{
@@ -21,6 +27,7 @@ const Header = () => {
         paddingBottom: 16,
       }}
     >
+      {/* Кнопка выбора группы */}
       <TouchableOpacity>
         <GradientText
           style={{
@@ -36,6 +43,7 @@ const Header = () => {
         </GradientText>
       </TouchableOpacity>
 
+      {/* Кнопка выбора подгруппы */}
       <TouchableOpacity
         style={{
           flex: 1,
@@ -44,9 +52,10 @@ const Header = () => {
           justifyContent: "flex-end",
           alignItems: "center",
         }}
+        onPress={props.onGroup}
       >
         <Text style={{ fontFamily: "M500", fontSize: 20, color: "#8E2DE2" }}>
-          1 подгр.
+          {`${props.group + 1} подгр.`}
         </Text>
         <AntDesign name="arrowdown" size={28} color="#8E2DE2" />
       </TouchableOpacity>
@@ -54,26 +63,46 @@ const Header = () => {
   );
 };
 
-const ScheduleNodeList = () => {
-  const todayLessons = [
-    null,
-    null,
-    {
-      
-      title: "Технология разработки програмного обеспечения (лек)",
-      auditory: "У903",
-    },
-    {
-      title: "Основы теории автоматического управления(лек)",
-      isActive: true,
-      auditory: "У105",
-    },
-    {
-      title: "Методы вычеслительной матемтики в проектной деятельности",
-      auditory: "А603",
-    },
-    null,
-  ];
+const ScheduleNodeList = (props) => {
+  const todayLessons = getSchedule((day = props.date.getDay() - 1));
+
+  const [lessonIndex, setlessonIndex] = useState(-1);
+
+  setInterval(() => {
+    const curTime = new Date(`2022-01-01T11:30:00`);
+
+    // const curTime = new Date(
+    //   `2022-01-01T${new Date()
+    //     .getHours()
+    //     .toString()
+    //     .padStart(2, "0")}:${new Date()
+    //     .getMinutes()
+    //     .toString()
+    //     .padStart(2, "0")}:00`
+    // );
+
+    const timeTable = [
+      "08:30 - 09:50",
+      "10:00 - 11:20",
+      "11:30 - 12:50",
+      "13:20 - 14:40",
+      "14:50 - 16:10",
+      "16:20 - 17:40",
+    ].map((element) => {
+      const temp = element.split(" - ");
+
+      return [
+        new Date(`2022-01-01T${temp[0]}:00`),
+        new Date(`2022-01-01T${temp[1]}:00`),
+      ];
+    });
+
+    timeTable.forEach((interval, index) => {
+      if (curTime >= interval[0] && curTime <= interval[1]) {
+        setlessonIndex(index);
+      }
+    });
+  }, 5);
 
   return (
     <ScrollView
@@ -85,13 +114,34 @@ const ScheduleNodeList = () => {
       }}
     >
       {todayLessons.map((lesson, index) => {
-        return <ScheduleNode content={lesson} index={index} key={index} />;
+        if (index === lessonIndex) {
+          lesson = { ...lesson, isActive: true };
+        }
+
+        return (
+          <ScheduleNode
+            content={lesson}
+            index={index}
+            key={index}
+            date={props.date}
+            group={props.group + 1}
+          />
+        );
       })}
     </ScrollView>
   );
 };
 
 const Main = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [curDate, setCurDate] = useState(new Date());
+  const [curGroup, setCurGroup] = useState(0);
+
+  const addDate = (step = 1) => {
+    curDate.setDate(curDate.getDate() + step);
+    return curDate.toLocaleDateString()
+  };
+
   return (
     <>
       <LinearGradient
@@ -104,10 +154,24 @@ const Main = () => {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       >
-        <Header />
-        <ScheduleNodeList />
+        <Header group={curGroup} onGroup={() => setCurGroup(!curGroup)} />
+        <ScheduleNodeList date={curDate} group={curGroup} />
       </LinearGradient>
-      <BottomPanel />
+      <BottomPanel
+        setDate={(step) => setCurDate(new Date(addDate(step)))}
+        onInput={() => setShowModal(true)}
+        inputDate={curDate}
+      />
+
+      {showModal && (
+        <DateTimePicker
+          value={curDate}
+          onChange={(event, selectedDate) => {
+            setShowModal(false);
+            setCurDate(selectedDate);
+          }}
+        />
+      )}
     </>
   );
 };

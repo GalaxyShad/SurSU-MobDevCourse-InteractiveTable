@@ -5,9 +5,9 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Neo } from "./Neo";
 
-const PrettyButton = ({iconName}) => {
+const PrettyButton = ({iconName, onClick}) => {
   return (
-    <TouchableOpacity style={style.main}>
+    <TouchableOpacity style={style.main} onPress={onClick}> 
       <Neo style={{...style.main, borderRadius: 64}}>
         <LinearGradient
           start={{ x: 0.0, y: -1.0 }}
